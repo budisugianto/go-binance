@@ -15,8 +15,8 @@ const (
 	baseCombinedMainURL    = "wss://stream.binance.com:9443/stream?streams="
 	baseCombinedTestnetURL = "wss://testnet.binance.vision/stream?streams="
 	// Future
-	baseFWsMainURL    = "wss://fstream-auth.binance.com:9443/ws"
-	baseFWsTestnetURL = "wss://testnet.binance.vision/ws"
+	baseFWsMainURL    = "wss://fstream.binance.com/ws"
+	baseFWsTestnetURL = "wss://stream.binancefuture.com/ws"
 )
 
 var (

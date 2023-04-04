@@ -14,6 +14,9 @@ const (
 	baseWsTestnetURL       = "wss://testnet.binance.vision/ws"
 	baseCombinedMainURL    = "wss://stream.binance.com:9443/stream?streams="
 	baseCombinedTestnetURL = "wss://testnet.binance.vision/stream?streams="
+	// Future
+	baseFWsMainURL    = "wss://fstream.binance.com:9443/ws"
+	baseFWsTestnetURL = "wss://testnet.binance.vision/ws"
 )
 
 var (
@@ -22,6 +25,14 @@ var (
 	// WebsocketKeepalive enables sending ping/pong messages to check the connection stability
 	WebsocketKeepalive = false
 )
+
+// getWsEndpoint return the base endpoint of the WS according the UseTestnet flag
+func getFWsEndpoint() string {
+	if UseTestnet {
+		return baseFWsTestnetURL
+	}
+	return baseFWsMainURL
+}
 
 // getWsEndpoint return the base endpoint of the WS according the UseTestnet flag
 func getWsEndpoint() string {
@@ -348,6 +359,22 @@ type WsKline struct {
 
 // WsAggTradeHandler handle websocket aggregate trade event
 type WsAggTradeHandler func(event *WsAggTradeEvent)
+
+// WsAggTradeServe serve websocket aggregate handler with a symbol
+func WsFAggTradeServe(symbol string, handler WsAggTradeHandler, errHandler ErrHandler) (doneC, stopC chan struct{}, err error) {
+	endpoint := fmt.Sprintf("%s/%s@aggTrade", getFWsEndpoint(), strings.ToLower(symbol))
+	cfg := newWsConfig(endpoint)
+	wsHandler := func(message []byte) {
+		event := new(WsAggTradeEvent)
+		err := json.Unmarshal(message, event)
+		if err != nil {
+			errHandler(err)
+			return
+		}
+		handler(event)
+	}
+	return wsServe(cfg, wsHandler, errHandler)
+}
 
 // WsAggTradeServe serve websocket aggregate handler with a symbol
 func WsAggTradeServe(symbol string, handler WsAggTradeHandler, errHandler ErrHandler) (doneC, stopC chan struct{}, err error) {

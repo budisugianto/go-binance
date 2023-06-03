@@ -9,12 +9,12 @@ import (
 // MultiAssetService create order
 type MultiAssetService struct {
 	c                 *Client
-	multiAssetsMargin *bool
+	multiAssetsMargin bool
 }
 
 // ReduceOnly set reduceOnly
 func (s *MultiAssetService) MultiAssetsMargin(multiAsset bool) *MultiAssetService {
-	s.multiAssetsMargin = &multiAsset
+	s.multiAssetsMargin = multiAsset
 	return s
 }
 
@@ -25,10 +25,10 @@ func (s *MultiAssetService) createOrder(ctx context.Context, endpoint string, op
 		endpoint: endpoint,
 		secType:  secTypeSigned,
 	}
-	m := params{}
-	if s.multiAssetsMargin != nil {
-		m["multiAssetsMargin"] = *s.multiAssetsMargin
+	m := params{
+		"multiAssetsMargin": s.multiAssetsMargin,
 	}
+
 	r.setFormParams(m)
 	data, header, err = s.c.callAPI(ctx, r, opts...)
 	if err != nil {

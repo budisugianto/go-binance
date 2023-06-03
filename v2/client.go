@@ -14,10 +14,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/bitly/go-simplejson"
 	"github.com/budisugianto/go-binance/v2/common"
 	"github.com/budisugianto/go-binance/v2/delivery"
 	"github.com/budisugianto/go-binance/v2/futures"
-	"github.com/bitly/go-simplejson"
 	jsoniter "github.com/json-iterator/go"
 )
 

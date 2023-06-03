@@ -430,6 +430,11 @@ func (c *Client) NewListBookTickersService() *ListBookTickersService {
 	return &ListBookTickersService{c: c}
 }
 
+// NewMultiAssetService init creating order service
+func (c *Client) NewMultiAssetService() *MultiAssetService {
+	return &MultiAssetService{c: c}
+}
+
 // NewCreateOrderService init creating order service
 func (c *Client) NewCreateOrderService() *CreateOrderService {
 	return &CreateOrderService{c: c}

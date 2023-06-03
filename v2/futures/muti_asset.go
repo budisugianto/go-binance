@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"strconv"
 )
 
 // MultiAssetService create order
@@ -26,7 +27,7 @@ func (s *MultiAssetService) createOrder(ctx context.Context, endpoint string, op
 		secType:  secTypeSigned,
 	}
 	m := params{
-		"multiAssetsMargin": s.multiAssetsMargin,
+		"multiAssetsMargin": strconv.FormatBool(s.multiAssetsMargin),
 	}
 
 	r.setFormParams(m)

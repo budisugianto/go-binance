@@ -40,7 +40,7 @@ func (s *MultiAssetService) createOrder(ctx context.Context, endpoint string, op
 
 // Do send request
 func (s *MultiAssetService) Do(ctx context.Context, opts ...RequestOption) (res *MultiAssetResponse, err error) {
-	data, header, err := s.createOrder(ctx, "/fapi/v1/multiAssetsMargin ", opts...)
+	data, header, err := s.createOrder(ctx, "/fapi/v1/multiAssetsMargin", opts...)
 	if err != nil {
 		return nil, err
 	}

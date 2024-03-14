@@ -1,7 +1,10 @@
 package common
 
-import "math"
-import "bytes"
+import (
+	"bytes"
+	"math"
+	"sync"
+)
 
 // AmountToLotSize converts an amount to a lot sized amount
 func AmountToLotSize(lot float64, precision int, amount float64) float64 {
@@ -18,4 +21,21 @@ func ToJSONList(v []byte) []byte {
 		return b.Bytes()
 	}
 	return v
+}
+
+type Int64c struct {
+	sync.RWMutex
+	data int64
+}
+
+func (v *Int64c) Set(d int64) {
+	v.Lock()
+	defer v.Unlock()
+	v.data = d
+}
+
+func (v *Int64c) Get() int64 {
+	v.RLock()
+	defer v.RUnlock()
+	return v.data
 }

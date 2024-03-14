@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/bitly/go-simplejson"
@@ -208,6 +209,7 @@ type Client struct {
 	Debug      bool
 	Logger     *log.Logger
 	TimeOffset int64
+	XApiWeight common.Int64c
 	do         doFunc
 }
 
@@ -310,6 +312,18 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 	c.debug("response: %#v", res)
 	c.debug("response body: %s", string(data))
 	c.debug("response status code: %d", res.StatusCode)
+
+	weight := ""
+	weight = res.Header.Get("X-Mbx-Used-Weight-1m")
+	if weight == "" {
+		weight = res.Header.Get("X-Mbx-Used-Weight")
+	}
+	k, err := strconv.ParseInt(weight, 10, 64)
+	if err != nil {
+		c.XApiWeight.Set(0)
+	} else {
+		c.XApiWeight.Set(k)
+	}
 
 	if res.StatusCode >= http.StatusBadRequest {
 		apiErr := new(common.APIError)
